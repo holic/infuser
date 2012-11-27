@@ -24,8 +24,10 @@ find = (relative) ->
 
 
 app.get '/:domain.js', (req, res, next) ->
-	# create glob patterns
 	{domain} = req.params
+	return next() unless domain
+
+	# create glob patterns
 	parts = domain.split '.'
 
 	patterns = []
