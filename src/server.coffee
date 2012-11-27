@@ -1,5 +1,5 @@
 express = require 'express'
-http = require 'http'
+https = require 'https'
 url = require 'url'
 fs = require 'fs'
 path = require 'path'
@@ -7,10 +7,12 @@ glob = require 'glob'
 npm = require '../package.json'
 coffee = require 'coffee-script'
 
+# load SSL certificate
+key = fs.readFileSync './ssl/key.pem', 'binary'
+cert = fs.readFileSync './ssl/cert.pem', 'binary'
 
 app = express()
-server = http.createServer app
-# http://www.hacksparrow.com/node-js-https-ssl-certificate.html
+server = https.createServer {key, cert}, app
 
 
 resolve = (relative) ->
