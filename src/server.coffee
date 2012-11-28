@@ -98,6 +98,6 @@ app.get '/:domain.css', (req, res, next) ->
 		css: -> res.send lines.join "\n"
 
 
-server.listen process.env.PORT or 3131, ->
+server.listen process.env.PORT or 3131, '127.0.0.1', ->
 	{address, port} = server.address()
 	console.log "Listening on #{address}:#{port}"
