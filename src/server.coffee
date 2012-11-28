@@ -50,10 +50,6 @@ app.get '/:domain.js', (req, res, next) ->
 	{domain} = req.params
 	return next() unless domain
 
-	# CORS, but probably unsafe as-is
-	# refer to dotjs for better implementation?
-	res.header 'Access-Control-Allow-Origin', '*'
-
 	# find files by patterns
 	files = find domain, "js", "coffee"
 
@@ -74,6 +70,7 @@ app.get '/:domain.js', (req, res, next) ->
 			"""
 		lines.push ""
 
+	# send compiled source
 	res.format
 		js: -> res.send lines.join "\n"
 
@@ -96,6 +93,7 @@ app.get '/:domain.css', (req, res, next) ->
 			lines.push "/* ERROR: #{e.message} */"
 		lines.push ""
 
+	# send compiled source
 	res.format
 		css: -> res.send lines.join "\n"
 
