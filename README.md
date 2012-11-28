@@ -6,7 +6,7 @@ Heavily inspired by [dotjs](https://github.com/defunkt/dotjs), **infuser** match
 
 ## Install
 
-**infuser** requires [Node.js with npm](http://nodejs.org/) (`brew install nodejs`) and [forever](https://github.com/nodejitsu/forever) (`npm install -g forever`).
+**infuser** requires [Node.js with npm](http://nodejs.org/) and [forever](https://github.com/nodejitsu/forever) (`npm install -g forever`).
 
 To install:
 
@@ -14,21 +14,22 @@ To install:
 2. `cd infuser`
 3. `npm install`
 4. `forever start lib/server.js`
-5. Then install the Chrome extension or userscript from **infuser**'s `extension` directory. Navigate to [your Chrome extensions](chrome://chrome/extensions) and:
-   * For the Chrome extension, toggle on "Developer mode", click "Load unpacked extension…", and select **infuser**'s' `extension` directory.
+5. Suppress SSL certificate warning at [`https://localhost:3131/google.com.js`](https://localhost:3131/google.com.js)
+6. Install the Chrome extension or userscript from **infuser**'s `extension` directory. Navigate to [your Chrome extensions](chrome://chrome/extensions) and use one of the following:
+   * For the Chrome extension, turn on "Developer mode", click "Load unpacked extension…", and select **infuser**'s `extension` directory.
    * For the userscript, drag the `infuser.user.js` into the window. The userscript may also be usable in Firefox or Safari, but is untested.
 
 
 ## Example
 
-A request to `https://www.google.com/`, for example, will compile and load a JS file and a CSS file by matching the following:
+A request to `https://www.google.com/`, for example, will compile and load a JS file and a CSS file as listed below.
 
 #### Compile order of `/google.com.js`
 ```
 ~/.infuser/_before/*.js
 ~/.infuser/_before/*.coffee
-~/.infuser/before.js
-~/.infuser/before.coffee
+~/.infuser/_before.js
+~/.infuser/_before.coffee
 ~/.infuser/.com/*.js
 ~/.infuser/.com/*.coffee
 ~/.infuser/.com.js
@@ -61,4 +62,4 @@ A request to `https://www.google.com/`, for example, will compile and load a JS 
 ~/.infuser/_after.css
 ```
 
-*Note: the `www.` prefix is ignored.*
+*Note: The domain's `www.` prefix is ignored. Wildcard matches are sorted by filename.*
