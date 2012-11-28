@@ -1,13 +1,29 @@
 # infuser
 ---
 ### Infuse web pages with your own JS and CSS
-Heavily inspired by [dotjs](https://github.com/defunkt/dotjs), **infuser** matches and loads JS, CoffeeScript, and CSS files from `~/.infuser` into Chrome based on the target web page's domain name.
+Heavily inspired by [dotjs](https://github.com/defunkt/dotjs), **infuser** matches and loads JS, CoffeeScript, and CSS files from `~/.infuser` into web pages based on their domain name.
+
+
+## Install
+
+**infuser** requires [Node.js with npm](http://nodejs.org/) (`brew install nodejs`) and [forever](https://github.com/nodejitsu/forever) (`npm install -g forever`).
+
+To install:
+
+1. `git clone git://github.com/holic/infuser.git`
+2. `cd infuser`
+3. `npm install`
+4. `forever start lib/server.js`
+5. Then install the Chrome extension or userscript from **infuser**'s `extension` directory. Navigate to [your Chrome extensions](chrome://chrome/extensions) and:
+   * For the Chrome extension, toggle on "Developer mode", click "Load unpacked extension…", and select **infuser**'s' `extension` directory.
+   * For the userscript, drag the `infuser.user.js` into the window. The userscript may also be usable in Firefox or Safari, but is untested.
+
 
 ## Example
 
 A request to `https://www.google.com/`, for example, will compile and load a JS file and a CSS file by matching the following:
 
-#### Compiled `/google.com.js`
+#### Compile order of `/google.com.js`
 ```
 ~/.infuser/_before/*.js
 ~/.infuser/_before/*.coffee
@@ -30,12 +46,11 @@ A request to `https://www.google.com/`, for example, will compile and load a JS 
 ~/.infuser/_after.js
 ~/.infuser/_after.coffee
 ```
-*Note: the `www.` prefix is ignored.*
 
-#### Compiled `/google.com.css`
+#### Compile order of `/google.com.css`
 ```
 ~/.infuser/_before/*.css
-~/.infuser/before.css
+~/.infuser/_before.css
 ~/.infuser/.com/*.css
 ~/.infuser/.com.css
 ~/.infuser/.google.com/*.css
@@ -46,15 +61,4 @@ A request to `https://www.google.com/`, for example, will compile and load a JS 
 ~/.infuser/_after.css
 ```
 
-
-## Install
-
-**infuser** requires [Node.js with npm](http://nodejs.org/) (`brew install nodejs`), [forever](https://github.com/nodejitsu/forever) (`npm install -g forever`), and the **infuser** Chrome plugin or userscript.
-
-To install:
-
-1. `git clone git://github.com/holic/infuser.git`
-2. `cd infuser`
-3. `npm install`
-4. `forever start lib/server.js`
-5. Then install the Chrome extension or userscript in **infuser**'s `extension` directory by dragging the `manifest.json` or `infuser.user.js` into [your Chrome extensions](chrome://chrome/extensions) interface. The userscript may also be usable in Firefox or Safari, but it's untested.
+*Note: the `www.` prefix is ignored.*
