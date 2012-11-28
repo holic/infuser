@@ -70,6 +70,9 @@ app.get '/:domain.js', (req, res, next) ->
 			lines.push "(function() {", source, "}).call(this);"
 		catch e
 			lines.push "// ERROR: #{e.message}"
+			lines.push """
+				console.error("[injector]", #{JSON.stringify(file)}, "\\n\\n", #{JSON.stringify(e.stack)});
+			"""
 		lines.push ""
 
 	res.format
