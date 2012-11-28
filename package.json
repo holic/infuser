@@ -1,13 +1,13 @@
 {
-  "name": "injector",
+  "name": "infuser",
   "version": "0.0.0",
-  "description": "Javascript injector",
+  "description": "Infuse web pages with your own JS and CSS",
   "main": "lib/server.js",
   "scripts": {
     "prestart": "node_modules/.bin/coffee -o lib -c src",
     "start": "node lib/server.js"
   },
-  "repository": "git://github.com/holic/injector.git",
+  "repository": "git://github.com/holic/infuser.git",
   "author": "Kevin Ingersoll <kingersoll@gmail.com>",
   "license": "WTFPL",
   "dependencies": {

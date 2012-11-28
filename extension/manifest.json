@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 
-	"name": "injector",
+	"name": "infuser",
 	"version": "0.0.1",
 
 	"permissions": ["tabs"],
@@ -9,6 +9,6 @@
 		"all_frames": true,
 		"matches": ["http://*/*", "https://*/*"],
 		"run_at": "document_end",
-		"js": ["injector.js"]
+		"js": ["infuser.js"]
 	}]
 }

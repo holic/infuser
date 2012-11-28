@@ -37,7 +37,7 @@ patterns = (domain) ->
 
 
 resolve = (relative) ->
-	path.resolve process.env.HOME, ".js", relative
+	path.resolve process.env.HOME, ".infuser", relative
 
 find = (domain, exts...) ->
 	list = []
@@ -66,7 +66,7 @@ app.get '/:domain.js', (req, res, next) ->
 		catch e
 			lines.push "// ERROR: #{e.message}"
 			lines.push """
-				console.error("[injector]", #{JSON.stringify(file)}, "\\n\\n", #{JSON.stringify(e.stack)});
+				console.error("[infuser]", #{JSON.stringify(file)}, "\\n\\n", #{JSON.stringify(e.stack)});
 			"""
 		lines.push ""
 
