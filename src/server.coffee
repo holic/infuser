@@ -18,45 +18,44 @@ app.configure ->
 	app.use express.logger 'dev'
 
 
+
+patterns = (domain) ->
+	parts = domain.split '.'
+
+	list = []
+	list.unshift "_after/*", "_after"
+	list.unshift "#{domain}/*", "#{domain}"
+	
+	loop
+		sub = parts.join '.'
+		list.unshift ".#{sub}/*", ".#{sub}"
+		parts.shift()
+		break unless parts.length
+
+	list.unshift "_before/*", "_before"
+	list
+
+
 resolve = (relative) ->
 	path.resolve process.env.HOME, ".js", relative
 
-find = (relative) ->
-	glob.sync resolve(relative)
-
+find = (domain, exts...) ->
+	list = []
+	for pattern in patterns domain
+		for ext in exts
+			list = list.concat glob.sync resolve "#{pattern}.#{ext}"
+	list
 
 app.get '/:domain.js', (req, res, next) ->
 	{domain} = req.params
 	return next() unless domain
 
-	# CORS
-	# probably unsafe as-is
-	# TODO: refer to dotjs for better implementation?
+	# CORS, but probably unsafe as-is
+	# refer to dotjs for better implementation?
 	res.header 'Access-Control-Allow-Origin', '*'
 
-
-	# create glob patterns
-	parts = domain.split '.'
-
-	patterns = []
-	patterns.unshift "_after/*.js", "_after.js"
-	patterns.unshift "#{domain}/*.js", "#{domain}.js"
-	
-	loop
-		sub = parts.join '.'
-		patterns.unshift ".#{sub}/*.js", ".#{sub}.js"
-		parts.shift()
-		break unless parts.length
-
-	patterns.unshift "_before/*.js", "_before.js"
-
 	# find files by patterns
-	files = []
-	for pattern in patterns
-		# find javascripts
-		files = files.concat find pattern
-		# find coffeescripts
-		files = files.concat find pattern.replace /\.js$/, '.coffee'
+	files = find domain, "js", "coffee"
 
 	# compile sources
 	lines = ["//  #{npm.name} [#{npm.version}]"]
@@ -77,6 +76,28 @@ app.get '/:domain.js', (req, res, next) ->
 
 	res.format
 		js: -> res.send lines.join "\n"
+
+
+app.get '/:domain.css', (req, res, next) ->
+	{domain} = req.params
+	return next() unless domain
+
+	# find files by patterns
+	files = find domain, "css"
+
+	# compile sources
+	lines = ["/*  #{npm.name} [#{npm.version}]  */"]
+	for file in files
+		lines.push "", "/*", "**  #{file}", "*/", ""
+		try
+			source = fs.readFileSync file, 'utf8'
+			lines.push source
+		catch e
+			lines.push "/* ERROR: #{e.message} */"
+		lines.push ""
+
+	res.format
+		css: -> res.send lines.join "\n"
 
 
 server.listen process.env.PORT or 3131, ->
