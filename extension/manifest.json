@@ -8,7 +8,7 @@
 	"content_scripts": [{
 		"all_frames": true,
 		"matches": ["http://*/*", "https://*/*"],
-		"run_at": "document_end",
+		"run_at": "document_start",
 		"js": ["injector.js"]
 	}]
 }

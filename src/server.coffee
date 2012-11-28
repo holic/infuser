@@ -14,18 +14,26 @@ cert = fs.readFileSync './ssl/cert.pem', 'binary'
 app = express()
 server = https.createServer {key, cert}, app
 
+app.configure ->
+	app.use express.logger 'dev'
+
 
 resolve = (relative) ->
 	path.resolve process.env.HOME, ".js", relative
 
 find = (relative) ->
-	console.log resolve(relative)
 	glob.sync resolve(relative)
 
 
 app.get '/:domain.js', (req, res, next) ->
 	{domain} = req.params
 	return next() unless domain
+
+	# CORS
+	# probably unsafe as-is
+	# TODO: refer to dotjs for better implementation?
+	res.header 'Access-Control-Allow-Origin', '*'
+
 
 	# create glob patterns
 	parts = domain.split '.'
